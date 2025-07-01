@@ -1,0 +1,18 @@
+.card-img-top {
+  height: 300px;
+  object-fit: cover;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.badge {
+  font-size: 0.9rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
