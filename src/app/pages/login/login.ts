@@ -49,7 +49,15 @@ export class Login {
       }, 2000);
 
     } catch (error: any) {
-      this.errorMessage = error.message;
+      if (
+        error.code === 'auth/user-not-found' ||
+        error.code === 'auth/wrong-password' ||
+        error.code === 'auth/invalid-credential'
+      ) {
+        this.errorMessage = 'Incorrect email or password';
+      } else {
+        this.errorMessage = 'An unexpected error occurred';
+      }
     }
   }
 

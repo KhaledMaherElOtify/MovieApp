@@ -73,9 +73,14 @@ export class Register {
   this.router.navigate(['/login']); 
 }, 3000);
 
+
       
     } catch (error: any) {
       this.errorMessage = error.message;
     }
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 }
