@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card p-4 shadow rounded-4" style="width: 100%; max-width: 400px;">
+    <h2 class="text-center mb-4 text-primary">Register</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" formControlName="name" class="form-control" />
+        <div *ngIf="submitted && f['name'].errors" class="text-danger">
+          Name is required
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" formControlName="email" class="form-control" />
+        <div *ngIf="submitted && f['email'].errors" class="text-danger">
+          Valid email is required
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" formControlName="password" class="form-control" />
+        <div *ngIf="submitted && f['password'].errors" class="text-danger">
+          Password must be at least 6 characters
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" formControlName="confirmPassword" class="form-control" />
+        <div *ngIf="submitted && f['confirmPassword'].errors" class="text-danger">
+          Confirm Password is required
+        </div>
+        <div *ngIf="submitted && registerForm.errors?.['mismatch']" class="text-danger">
+          Passwords do not match
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+
+      <div *ngIf="successMessage" class="alert alert-success mt-3">
+        {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
+</div>

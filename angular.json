@@ -82,11 +82,15 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "1f3078c6-4c89-4dfd-b1ab-fdf5b4c03ca9"
   }
 }
