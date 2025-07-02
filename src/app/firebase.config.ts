@@ -1,4 +1,6 @@
 import { initializeApp } from "firebase/app";
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+
 export const firebaseConfig = {
   apiKey: "AIzaSyCsAULS4YQsR8y0GAb2MMQQEOU82JnOIHY",
   authDomain: "movieapp-6d29d.firebaseapp.com",

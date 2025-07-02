@@ -1,6 +1,7 @@
 <div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
   <div class="card p-4 shadow rounded-4" style="width: 100%; max-width: 400px;">
-    <h2 class="text-center mb-4 text-primary">Login</h2>
+    <h2 class="text-center mb-4 text-warning">Login</h2>
+
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="mb-3">
@@ -19,7 +20,8 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100">Login</button>
+      <button type="submit" class="btn btn-warning w-100 text-dark">Login</button>
+
 
       <div *ngIf="successMessage" class="alert alert-success mt-3">
         {{ successMessage }}

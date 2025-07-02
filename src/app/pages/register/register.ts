@@ -71,13 +71,18 @@ export class Register {
   this.registerForm.reset();
   this.submitted = false;
   this.router.navigate(['/login']); 
-}, 3000);
+},);
 
 
       
     } catch (error: any) {
-      this.errorMessage = error.message;
-    }
+  if (error.code === 'auth/email-already-in-use') {
+    this.errorMessage = 'This email already exists.';
+  } else {
+    this.errorMessage = 'An error occurred. Please try again.';
+  }
+}
+
   }
 
   goToLogin() {

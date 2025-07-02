@@ -45,8 +45,8 @@ export class Login {
 
       setTimeout(() => {
         this.successMessage = '';
-        this.router.navigate(['/']); 
-      }, 2000);
+        this.router.navigate(['/home']); 
+      },);
 
     } catch (error: any) {
       if (
