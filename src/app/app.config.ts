@@ -11,6 +11,7 @@ import { importProvidersFrom } from '@angular/core';
 
 
 import { routes } from './app.routes';
+import {  withFetch } from '@angular/common/http';
 
 
 
@@ -18,6 +19,7 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(withFetch()),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
