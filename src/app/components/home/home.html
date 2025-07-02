@@ -21,43 +21,77 @@
 <section class="bg-light p-5 m-5  text-center">
   <h2>Welcome to our movie app</h2>
   <p class="text-muted">Millions of movies, TV shows and people to discover. Explore now.</p>
-  <div class="d-flex justify-content-center mt-4">
-    <input type="text" class="form-control w-50 me-2" placeholder="Search and explore..." />
-    <button class="btn btn-warning">Search</button>
-  </div>
-</section>
+<!-- 🔍 Search Input and Suggestions -->
+<div class="d-flex justify-content-center mt-4">
+  <div class="position-relative w-50">
+    <input
+      type="text"
+      class="form-control me-2"
+      placeholder="Search and explore..."
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()" />
 
-<!-- now Playing Section -->
-<section class="container mt-5">
-  <h4 class="fw-bold mb-3">Now Playing</h4>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
-    <div class="col" *ngFor="let movie of MovieList">
+    <!-- <ul class="list-group position-absolute w-100 mt-1 z-3" *ngIf="suggestedMovies.length">
+      <li
+        class="list-group-item list-group-item-action"
+        *ngFor="let movie of suggestedMovies"
+        (click)="searchTerm = movie.title; onSearchChange();">
+        {{ movie.title }}
+      </li>
+    </ul> -->
+  </div>
+
+  <button class="btn btn-warning ms-2" (click)="clearSearch()">Clear</button>
+</div>
+
+<!-- 🎯 If searchResults exist, show them -->
+<section class="container mt-5" *ngIf="searchResults.length > 0">
+  <h4 class="fw-bold mb-3">Search Results</h4>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-1">
+    <div class="col" *ngFor="let movie of searchResults">
       <div class="card h-100 d-flex flex-column border-0 shadow-sm">
         <div class="position-relative">
-          <img [src]="'https://image.tmdb.org/t/p/w500' + movie?.poster_path"
+          <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
                class="card-img-top"
                alt="Movie Poster" />
           <span class="position-absolute top-0 start-0 badge bg-dark text-warning m-2 rounded-circle p-2">
             {{ movie.vote_average }}
           </span>
-          <span class="position-absolute top-0 end-0 m-2 text-white fs-5">⋯</span>
         </div>
-
         <div class="card-body d-flex flex-column justify-content-between">
           <h6 class="card-title mb-2">{{ movie.title }}</h6>
-          <div class="d-flex justify-content-between align-items-center mt-auto">
-            <small class="text-muted">
-              {{ movie.release_date | date: 'MMM dd, yyyy' }}
-            </small>
-            <div class="d-flex align-items-center gap-2">
-              <i class="fa fa-heart text-warning"></i>
-              <i class="fa-regular fa-heart"></i>
-            </div>
-          </div>
+          <p class="text-muted small">{{ movie.release_date | date: 'MMM dd, yyyy' }}</p>
+          <button class="btn btn-warning">Details</button>
         </div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- 🎥 Default "Now Playing" section if no search -->
+<section class="container mt-5" *ngIf="searchResults.length === 0">
+  <h4 class="fw-bold mb-3">Now Playing</h4>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+    <div class="col" *ngFor="let movie of MovieList">
+      <div class="card h-100 d-flex flex-column border-0 shadow-sm">
+        <div class="position-relative">
+          <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+               class="card-img-top"
+               alt="Movie Poster" />
+          <span class="position-absolute top-0 start-0 badge bg-dark text-warning m-2 rounded-circle p-2">
+            {{ movie.vote_average }}
+          </span>
+        </div>
+        <div class="card-body d-flex flex-column justify-content-between">
+          <h6 class="card-title mb-2">{{ movie.title }}</h6>
+          <p class="text-muted small">{{ movie.release_date | date: 'MMM dd, yyyy' }}</p>
+          <button class="btn btn-warning">Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
   <!-- pagination par -->
   <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center">
