@@ -3,9 +3,22 @@ import { FormsModule,ReactiveFormsModule, FormBuilder, FormGroup, Validators } f
 import { CommonModule } from '@angular/common';
 import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { sendPasswordResetEmail } from '@angular/fire/auth';
+
 @Component({
   selector: 'app-login',
-  imports: [FormsModule , ReactiveFormsModule,CommonModule],
+  imports: [FormsModule , ReactiveFormsModule,CommonModule,],
+  styles: [`
+    .forgot-link {
+      color: #6c757d;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .forgot-link:hover {
+      color: #ffc107 !important;
+      text-decoration: underline !important;
+    }
+  `],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -29,6 +42,10 @@ export class Login {
   get f() {
     return this.loginForm.controls;
   }
+
+  goToRegister() {
+  this.router.navigate(['/register']);
+}
 
   async onSubmit() {
     this.submitted = true;
@@ -60,5 +77,28 @@ export class Login {
       }
     }
   }
+async onForgotPassword() {
+  const email = this.loginForm.get('email')?.value;
+
+  if (!email) {
+    this.errorMessage = 'Please enter your email to reset your password.';
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(this.auth, email);
+    this.successMessage = 'A password reset link has been sent to your email.';
+    this.errorMessage = '';
+  } catch (error: any) {
+    this.successMessage = '';
+    if (error.code === 'auth/user-not-found') {
+      this.errorMessage = 'No user found with this email.';
+    } else if (error.code === 'auth/invalid-email') {
+      this.errorMessage = 'Please enter a valid email address.';
+    } else {
+      this.errorMessage = 'Something went wrong. Please try again.';
+    }
+  }
+}
 
 }
