@@ -1,3 +1,4 @@
+
 .card-img-top {
   height: 300px;
   object-fit: cover;
@@ -42,4 +43,22 @@
 .card-img-top {
   height: 75%; 
   object-fit: cover;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #ffc107; /* Bootstrap warning color */
+  border-color: #ffc107;
+  color: #212529;
+  font-weight: bold;
+}
+
+.pagination .page-link {
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #f8f9fa;
+  color: #000;
 }

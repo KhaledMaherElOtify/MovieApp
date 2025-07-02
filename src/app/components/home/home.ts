@@ -19,6 +19,9 @@ export class Home implements OnInit {
   searchResults: IMovie[] = [];
   searchTerm: string = '';
 
+  currentPage: number = 1;
+  itemsPerPage: number = 8;
+
   constructor(private _Fetch: Fetch, private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -29,7 +32,8 @@ export class Home implements OnInit {
     this._Fetch.getMovies().subscribe({
       next: (res) => {
         this.MovieList = res.results;
-        this.searchResults = []; // reset search results on load
+        this.searchResults = []; // reset search results
+        this.currentPage = 1;
       },
       error: (err) => {
         console.error('Error fetching movies:', err);
@@ -40,16 +44,20 @@ export class Home implements OnInit {
   onSearchChange() {
     if (this.searchTerm.trim().length < 2) {
       this.suggestedMovies = [];
+      this.searchResults = [];
+      this.currentPage = 1;
       return;
     }
 
     const API_KEY = '943a1d14054f1dcc52c2bc72de292ab7';
     const query = encodeURIComponent(this.searchTerm);
+
     this.http
       .get<any>(`https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${API_KEY}`)
       .subscribe(res => {
-        this.suggestedMovies = res.results.slice(0, 5); // For dropdown
-        this.searchResults = res.results;               // For full display
+        this.suggestedMovies = res.results.slice(0, 5);
+        this.searchResults = res.results;
+        this.currentPage = 1;
       });
   }
 
@@ -57,6 +65,31 @@ export class Home implements OnInit {
     this.searchTerm = '';
     this.suggestedMovies = [];
     this.searchResults = [];
+    this.currentPage = 1;
     this.loadNowPlayingMovies();
+  }
+
+  get paginatedMovies(): IMovie[] {
+    const data = this.activeData;
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return data.slice(start, start + this.itemsPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.activeData.length / this.itemsPerPage);
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  changePage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  get activeData(): IMovie[] {
+    return this.searchResults.length > 0 ? this.searchResults : this.MovieList;
   }
 }
