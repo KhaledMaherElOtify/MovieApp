@@ -7,6 +7,7 @@ import { IMovie } from '../../Models/imovie';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { MovieService } from '../../Service/movie-service';
 
 @Component({
   selector: 'app-home',
@@ -28,16 +29,20 @@ export class Home implements OnInit {
   selectedGenreId: string = '';
 
   private API_KEY = '943a1d14054f1dcc52c2bc72de292ab7';
+  movies: IMovie[] = [];
 
   constructor(
     private _Fetch: Fetch,
     private http: HttpClient,
     private wishlistService: WishlistService,
+    private movieService: MovieService  
   ) {}
 
   ngOnInit(): void {
-    this.loadNowPlayingMovies(this.currentPage);
     this.loadGenres();
+     this.movieService.language$.subscribe(() => {
+  this.loadNowPlayingMovies(this.currentPage);
+});
   }
 
 
@@ -64,7 +69,11 @@ export class Home implements OnInit {
     }
   }
 
-  
+  loadMovies(): void {
+  this.movieService.getNowPlaying().subscribe(movies => {
+    this.movies = movies;
+  });
+}
 
   loadNowPlayingMovies(page: number): void {
     this._Fetch.getMovies(page).subscribe({
@@ -125,27 +134,30 @@ export class Home implements OnInit {
     });
 }
 filterByGenre(): void {
-  if (!this.selectedGenreId) {
-    if (this.searchTerm.trim()) {
-      this.performSearch(this.searchTerm, 1);
-    } else {
-      this.loadNowPlayingMovies(1);
-    }
-    return;
-  }
-
-  this.http
-    .get<any>(`https://api.themoviedb.org/3/discover/movie?with_genres=${this.selectedGenreId}&api_key=${this.API_KEY}&page=1`)
-    .subscribe({
-      next: (res) => {
-        this.searchResults = res.results;
-        this.totalPages = res.total_pages;
-        this.currentPage = 1;
-      },
-      error: (err) => {
-        console.error('Failed to filter by genre', err);
+  this.movieService.language$.subscribe((lang) => {
+    if (!this.selectedGenreId) {
+      if (this.searchTerm.trim()) {
+        this.performSearch(this.searchTerm, 1);
+      } else {
+        this.loadNowPlayingMovies(1);
       }
-    });
+      return;
+    }
+
+    this.http
+      .get<any>(`https://api.themoviedb.org/3/discover/movie?with_genres=${this.selectedGenreId}&api_key=${this.API_KEY}&language=${lang}&page=1`)
+      .subscribe({
+        next: (res) => {
+          this.searchResults = res.results;
+          this.totalPages = res.total_pages;
+          this.currentPage = 1;
+        },
+        error: (err) => {
+          console.error('Failed to filter by genre', err);
+        }
+      });
+  });
 }
+
 
 }

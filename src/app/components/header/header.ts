@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { WishlistService } from '../../Service/wishlist.service';
 import { Auth, authState, User } from '@angular/fire/auth';
+import { MovieService } from '../../Service/movie-service';
 
 @Component({
   selector: 'app-header',
@@ -16,10 +17,18 @@ export class Header implements OnInit {
     wishlistCount: number = 0;
     isAuthenticated: boolean = false;
     user: User | null = null;
+    availableLanguages = [
+    { code: 'en-US', name: 'En' },
+    { code: 'ar-SA', name: 'Ar' },
+    { code: 'fr-FR', name: 'Fr' },
+    { code: 'es-ES', name: 'Es' }
+  ];
 
+  selectedLanguage = this.availableLanguages[0];
   constructor(private router: Router,
       private wishlistService: WishlistService,
       private auth: Auth,
+      private movieService: MovieService
     ) {}
   ngOnInit(): void {
     this.subscription.add(
@@ -44,4 +53,11 @@ export class Header implements OnInit {
       console.error('Logout failed', error);
     });
   }
+changeLanguage(lang: { code: string; name: string }, event: MouseEvent): void {
+  event.preventDefault();
+  this.selectedLanguage = lang;
+
+  this.movieService.setLanguage(lang.code);
+}
+
 }

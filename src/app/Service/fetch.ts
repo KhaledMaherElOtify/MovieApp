@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { MovieService } from './movie-service';
 
 const Api_key = '943a1d14054f1dcc52c2bc72de292ab7';
 const URL = 'https://api.themoviedb.org/3';
@@ -10,10 +11,11 @@ const URL = 'https://api.themoviedb.org/3';
 })
 export class Fetch {
 
-  constructor(private _HttpClient: HttpClient) { }
+  constructor(private _HttpClient: HttpClient, private movieService: MovieService) { }
 
   getMovies(page: number = 1): Observable<any> {
-  return this._HttpClient.get(`https://api.themoviedb.org/3/movie/popular?api_key=${Api_key}&page=${page}`);
+     const language = this.movieService.getCurrentLanguage();
+  return this._HttpClient.get(`https://api.themoviedb.org/3/movie/popular?api_key=${Api_key}&page=${page}&language=${language}`);
 }
 
 
