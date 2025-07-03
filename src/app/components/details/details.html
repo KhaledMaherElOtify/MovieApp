@@ -1,7 +1,7 @@
 <div *ngIf="movie.backdrop_path" class="backdrop-banner" [style.backgroundImage]="'url(' + 'https://image.tmdb.org/t/p/w1280' + movie.backdrop_path + ')'"
 >
   <div class="backdrop-overlay">
-    <h1 class="movie-title">{{ movie.title }}</h1>
+    <h1 class="movie-title" style=" text-align: center;">{{ movie.title }}</h1>
     <p class="tagline" *ngIf="movie.tagline">{{ movie.tagline }}</p>
   </div>
 </div>

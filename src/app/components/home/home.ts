@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { IMovie } from '../../Models/imovie';
 import { Fetch } from '../../Service/fetch';
 import { WishlistService } from '../../Service/wishlist.service';
 import { MovieService } from '../../Service/movie-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -16,24 +16,18 @@ import { MovieService } from '../../Service/movie-service';
   styleUrls: ['./home.css'],
   imports: [CommonModule, FormsModule, RouterModule]
 })
-export class Home implements OnInit {
-
+export class Home implements OnInit, OnDestroy {
   MovieList: IMovie[] = [];
   searchResults: IMovie[] = [];
-
+  language: string = 'en-US';
   searchTerm: string = '';
   selectedGenreId: string = '';
   genres: { id: number; name: string }[] = [];
-
-  
   currentPage: number = 1;
   totalPages: number = 1;
   itemsPerPage: number = 8;
-
-  
-  private excludedGenreIds = [18,10749]; // Horror, Documentary
-
-  // API Key
+  private subscription: Subscription = new Subscription();
+  private excludedGenreIds = [18, 10749]; // Drama, Romance
   private API_KEY = '943a1d14054f1dcc52c2bc72de292ab7';
 
   constructor(
@@ -45,9 +39,20 @@ export class Home implements OnInit {
 
   ngOnInit(): void {
     this.loadGenres();
-    this.movieService.language$.subscribe(() => {
-      this.loadNowPlayingMovies(this.currentPage);
-    });
+    this.subscription.add(
+      this.movieService.language$.subscribe(lang => {
+        this.language = lang;
+        this.loadNowPlayingMovies(this.currentPage);
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  get textDirection(): string {
+    return this.language === 'ar-SA' ? 'rtl' : 'ltr';
   }
 
   get activeData(): IMovie[] {
@@ -64,9 +69,12 @@ export class Home implements OnInit {
   changePage(page: number): void {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
-    this.searchTerm.trim().length >= 2
-      ? this.performSearch(this.searchTerm, page)
-      : this.loadNowPlayingMovies(page);
+
+    if (this.searchTerm.trim().length >= 2) {
+      this.performSearch(this.searchTerm, page);
+    } else {
+      this.loadNowPlayingMovies(page);
+    }
   }
 
   loadNowPlayingMovies(page: number): void {
@@ -89,17 +97,17 @@ export class Home implements OnInit {
   }
 
   performSearch(query: string, page: number): void {
-    const encoded = encodeURIComponent(query);
-    this.http.get<any>(
-      `https://api.themoviedb.org/3/search/movie?query=${encoded}&api_key=${this.API_KEY}&page=${page}`
-    ).subscribe({
-      next: res => {
-        this.searchResults = this.filterMovies(res.results);
-        this.totalPages = res.total_pages;
-        this.currentPage = page;
-      },
-      error: err => console.error('Search error:', err)
-    });
+    const encodedQuery = encodeURIComponent(query);
+    this.http
+      .get<any>(`https://api.themoviedb.org/3/search/movie?query=${encodedQuery}&api_key=${this.API_KEY}&page=${page}&language=${this.language}`)
+      .subscribe({
+        next: res => {
+          this.searchResults = this.filterMovies(res.results);
+          this.totalPages = res.total_pages;
+          this.currentPage = page;
+        },
+        error: err => console.error('Search error:', err)
+      });
   }
 
   clearSearch(): void {
@@ -110,50 +118,49 @@ export class Home implements OnInit {
   }
 
   loadGenres(): void {
-    this.http.get<any>(
-      `https://api.themoviedb.org/3/genre/movie/list?api_key=${this.API_KEY}`
-    ).subscribe({
-      next: res => {
-        this.genres = res.genres.filter((g: any) => !this.excludedGenreIds.includes(g.id));
-      },
-      error: err => console.error('Failed to load genres', err)
-    });
+    this.http
+      .get<any>(`https://api.themoviedb.org/3/genre/movie/list?api_key=${this.API_KEY}&language=${this.language}`)
+      .subscribe({
+        next: res => {
+          this.genres = res.genres.filter((genre: { id: number; name: string }) => !this.excludedGenreIds.includes(genre.id));
+        },
+        error: err => console.error('Failed to load genres', err)
+      });
   }
 
   filterByGenre(): void {
-    this.movieService.language$.subscribe(lang => {
-      if (!this.selectedGenreId) {
-        this.searchTerm.trim()
-          ? this.performSearch(this.searchTerm, 1)
-          : this.loadNowPlayingMovies(1);
-        return;
+    if (!this.selectedGenreId) {
+      if (this.searchTerm.trim()) {
+        this.performSearch(this.searchTerm, 1);
+      } else {
+        this.loadNowPlayingMovies(1);
       }
+      return;
+    }
 
-      this.http.get<any>(
-        `https://api.themoviedb.org/3/discover/movie?with_genres=${this.selectedGenreId}&api_key=${this.API_KEY}&language=${lang}&page=1`
-      ).subscribe({
+    this.http
+      .get<any>(`https://api.themoviedb.org/3/discover/movie?with_genres=${this.selectedGenreId}&api_key=${this.API_KEY}&language=${this.language}&page=1`)
+      .subscribe({
         next: res => {
           this.searchResults = this.filterMovies(res.results);
           this.totalPages = res.total_pages;
           this.currentPage = 1;
         },
-        error: err => console.error('Genre filter error:', err)
+        error: err => console.error('Failed to filter by genre', err)
       });
-    });
-  }
-
-  private filterMovies(movies: IMovie[]): IMovie[] {
-    return movies.filter(movie =>
-      movie?.adult === false &&
-      !movie.genre_ids?.some(id => this.excludedGenreIds.includes(id))
-    );
   }
 
   toggleWishlist(movie: IMovie): void {
     this.wishlistService.toggleWishlist(movie);
   }
 
-  isInWishlist(id: number): boolean {
-    return this.wishlistService.isInWishlist(id);
+  isInWishlist(movieId: number): boolean {
+    return this.wishlistService.isInWishlist(movieId);
+  }
+
+  private filterMovies(movies: IMovie[]): IMovie[] {
+    return movies.filter(movie => 
+      !movie.genre_ids.some(genreId => this.excludedGenreIds.includes(genreId))
+    );
   }
 }

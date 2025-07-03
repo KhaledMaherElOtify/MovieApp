@@ -11,7 +11,6 @@ export const routes: Routes = [
     path: 'home',
     loadComponent: () =>
     import('./components/home/home').then(m => m.Home), 
-    canActivate: [isAuthenticatedGuard]
   },
   {
     path: 'register',
@@ -26,8 +25,7 @@ export const routes: Routes = [
   {
     path: 'wishlist',
     loadComponent: () =>
-      import('./components/wishlist/wishlist').then(m => m.Wishlist),
-    canActivate: [isAuthenticatedGuard]
+      import('./components/wishlist/wishlist').then(m => m.Wishlist)
   },
   {
     path: 'details/:id',
