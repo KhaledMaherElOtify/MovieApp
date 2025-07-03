@@ -12,9 +12,10 @@ export class Fetch {
 
   constructor(private _HttpClient: HttpClient) { }
 
-  getMovies(): Observable<any> {
-    return this._HttpClient.get(`${URL}/movie/popular?api_key=${Api_key}`);
-  }
+  getMovies(page: number = 1): Observable<any> {
+  return this._HttpClient.get(`https://api.themoviedb.org/3/movie/popular?api_key=${Api_key}&page=${page}`);
+}
+
 
   getMovieById(id: number): Observable<any> {
     return this._HttpClient.get(`${URL}/movie/${id}?api_key=${Api_key}&language=en-US`);

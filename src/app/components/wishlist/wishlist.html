@@ -5,11 +5,12 @@
     <div class="d-flex gap-2">
       <span class="badge bg-warning text-dark fs-6">{{ wishlistItems.length }} movies</span>
       <button 
-        *ngIf="wishlistItems.length > 0"
-        class="btn btn-outline-danger btn-sm" 
-        (click)="clearWishlist()">
-        Clear All
+      *ngIf="wishlistItems.length > 0"
+      class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" 
+      (click)="clearWishlist()">
+      <i class="fa fa-trash"></i>
       </button>
+
     </div>
   </div>
 
