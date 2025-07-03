@@ -78,3 +78,12 @@
   background-color: #f8f9fa;
   color: #000;
 }
+.fa-heart {
+  margin-left: 12px; 
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.fa-heart:hover {
+  transform: scale(1.1);
+}

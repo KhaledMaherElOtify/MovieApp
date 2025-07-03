@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { IMovie } from '../../Models/imovie';
 import { WishlistService } from '../../Service/wishlist.service';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-wishlist',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './wishlist.html',
   styleUrls: ['./wishlist.css']
 })
