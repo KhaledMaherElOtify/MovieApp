@@ -18,20 +18,23 @@
   </div>
 </section>
 
-<!-- Genre Filter Dropdown -->
-<div class="d-flex justify-content-end mb-3 genre-dropdown-wrapper me-5">
-  <select class="form-select genre-dropdown" [(ngModel)]="selectedGenreId" (change)="filterByGenre()">
-    <option value="">All Genres</option>
-    <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
-  </select>
-</div>
+
 
 
 <!-- Results Section -->
 <section class="container mt-5">
-  <h4 class="fw-bold mb-3 text-start">
+<div class="d-flex justify-content-between align-items-center mb-3 px-3">
+  <h4 class="fw-bold mb-0">
     {{ searchResults.length > 0 ? 'Search Results' : 'Now Playing' }}
   </h4>
+
+  <div class="genre-dropdown-wrapper" style="width: 200px;">
+    <select class="form-select" [(ngModel)]="selectedGenreId" (change)="filterByGenre()">
+      <option value="">All Genres</option>
+      <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
+    </select>
+  </div>
+</div>
 
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
     <div class="col" *ngFor="let movie of activeData">
