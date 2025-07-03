@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card p-4 shadow rounded-4" style="width: 100%; max-width: 400px;">
+    <h2 class="text-center mb-4 text-warning">Login</h2>
+
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" formControlName="email" class="form-control" />
+        <div *ngIf="submitted && f['email'].errors" class="text-danger">
+          Valid email is required
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" formControlName="password" class="form-control" />
+        <div *ngIf="submitted && f['password'].errors" class="text-danger">
+          Password is required
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-warning w-100 text-dark">Login</button>
+
+
+      <div *ngIf="successMessage" class="alert alert-success mt-3">
+        {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
+      </div>
+    </form>
+    <div class="text-center mt-2">
+ <div class="text-center mb-4">
+  <a href="#" (click)="onForgotPassword(); $event.preventDefault()" class="forgot-link text-decoration-none text-secondary small">
+  Forgot password?
+  </a>
+ <div class="d-flex justify-content-center align-items-center mt-3">
+  <span class="me-2">Don't have an account?</span>
+  <button class="btn btn-outline-warning btn-sm" (click)="goToRegister()">
+    Sign up
+  </button>
+</div>
+
+</div>
+
+</div>
+
+  </div>
+</div>

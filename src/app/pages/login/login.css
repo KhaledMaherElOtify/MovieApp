@@ -1,0 +1,10 @@
+.forgot-link {
+  color: #6c757d; 
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.forgot-link:hover {
+  color: #ffc107; 
+  text-decoration: underline;
+}
