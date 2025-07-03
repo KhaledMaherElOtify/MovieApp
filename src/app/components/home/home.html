@@ -18,6 +18,16 @@
   </div>
 </section>
 
+<!-- Genre Filter Dropdown -->
+<!-- Genre Filter Dropdown -->
+<div class="d-flex justify-content-end mb-3 genre-dropdown-wrapper me-5">
+  <select class="form-select genre-dropdown" [(ngModel)]="selectedGenreId" (change)="filterByGenre()">
+    <option value="">All Genres</option>
+    <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
+  </select>
+</div>
+
+
 <!-- Results Section -->
 <section class="container mt-5">
   <h4 class="fw-bold mb-3 text-start">

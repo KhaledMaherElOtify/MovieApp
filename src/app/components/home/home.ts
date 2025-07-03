@@ -24,6 +24,8 @@ export class Home implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   itemsPerPage: number = 8;
+  genres: { id: number; name: string }[] = [];
+  selectedGenreId: string = '';
 
   private API_KEY = '943a1d14054f1dcc52c2bc72de292ab7';
 
@@ -35,6 +37,7 @@ export class Home implements OnInit {
 
   ngOnInit(): void {
     this.loadNowPlayingMovies(this.currentPage);
+    this.loadGenres();
   }
 
 
@@ -60,6 +63,8 @@ export class Home implements OnInit {
       this.loadNowPlayingMovies(page);
     }
   }
+
+  
 
   loadNowPlayingMovies(page: number): void {
     this._Fetch.getMovies(page).subscribe({
@@ -110,4 +115,37 @@ export class Home implements OnInit {
   isInWishlist(movieId: number): boolean {
     return this.wishlistService.isInWishlist(movieId);
   }
+
+  loadGenres(): void {
+  this.http
+    .get<any>(`https://api.themoviedb.org/3/genre/movie/list?api_key=${this.API_KEY}`)
+    .subscribe({
+      next: (res) => this.genres = res.genres,
+      error: (err) => console.error('Failed to load genres', err)
+    });
+}
+filterByGenre(): void {
+  if (!this.selectedGenreId) {
+    if (this.searchTerm.trim()) {
+      this.performSearch(this.searchTerm, 1);
+    } else {
+      this.loadNowPlayingMovies(1);
+    }
+    return;
+  }
+
+  this.http
+    .get<any>(`https://api.themoviedb.org/3/discover/movie?with_genres=${this.selectedGenreId}&api_key=${this.API_KEY}&page=1`)
+    .subscribe({
+      next: (res) => {
+        this.searchResults = res.results;
+        this.totalPages = res.total_pages;
+        this.currentPage = 1;
+      },
+      error: (err) => {
+        console.error('Failed to filter by genre', err);
+      }
+    });
+}
+
 }
