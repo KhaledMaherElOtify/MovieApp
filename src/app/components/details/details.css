@@ -1,0 +1,95 @@
+.container {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 2rem;
+}
+img.img-fluid {
+  max-height: 480px;
+  object-fit: cover;
+}
+.favorite-btn {
+  font-size: 1.1rem;
+  transition: color 0.2s, background 0.2s;
+}
+.favorite-btn.favorited {
+  color: #e63946;
+  background: #ffe5e9;
+  border-color: #e63946;
+}
+.btn-outline-secondary {
+  border-radius: 20px;
+}
+.sim-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.sim-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+.card-img-top {
+  height: 320px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+.card-title {
+  font-weight: 600;
+}
+.backdrop-banner {
+  position: relative;
+  height: 320px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px 16px 0 0;
+  margin-bottom: 2rem;
+}
+.backdrop-overlay {
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  border-radius: 16px 16px 0 0;
+}
+.movie-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.tagline {
+  font-style: italic;
+  font-size: 1.2rem;
+  opacity: 0.85;
+}
+
+.sim-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+.sim-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.sim-overlay {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+  max-height: 70%;
+  overflow-y: auto;
+  font-size: 0.95rem;
+  z-index: 2;
+}
+.sim-card:hover .sim-overlay {
+  opacity: 1;
+}
+.sim-card .badge {
+  font-size: 0.9rem;
+}

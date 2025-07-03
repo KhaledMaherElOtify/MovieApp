@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
 import { Fetch } from '../../Service/fetch';
+import { WishlistService } from '../../Service/wishlist.service';
+import { CommonModule } from '@angular/common';
 import { IMovie } from '../../Models/imovie';
+import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -12,9 +15,12 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
 
   MovieList: IMovie[] = [];
+  wishlistCount: number = 0;
+  private subscription: Subscription = new Subscription();
+
   suggestedMovies: IMovie[] = [];
   searchResults: IMovie[] = [];
   searchTerm: string = '';
@@ -22,9 +28,43 @@ export class Home implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 8;
 
-  constructor(private _Fetch: Fetch, private http: HttpClient) {}
+  constructor(private _Fetch: Fetch, private http: HttpClient, private wishlistService: WishlistService,
+    private router: Router) {}
 
   ngOnInit(): void {
+    this.loadMovies();
+    this.subscription.add(
+      this.wishlistService.getWishlistCount().subscribe(count => {
+        this.wishlistCount = count;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  loadMovies(): void {
+    this._Fetch.getMovies().subscribe({
+      next: (res) => {
+        this.MovieList = res.results;
+      },
+      error: (err) => {
+        console.error('Error fetching movies:', err);
+      }
+    });
+  }
+
+  toggleWishlist(movie: IMovie): void {
+    this.wishlistService.toggleWishlist(movie);
+  }
+
+  isInWishlist(movieId: number): boolean {
+    return this.wishlistService.isInWishlist(movieId);
+  }
+
+  goToWishlist(): void {
+    this.router.navigate(['/wishlist']);
     this.loadNowPlayingMovies();
   }
 
@@ -32,7 +72,7 @@ export class Home implements OnInit {
     this._Fetch.getMovies().subscribe({
       next: (res) => {
         this.MovieList = res.results;
-        this.searchResults = []; // reset search results
+        this.searchResults = [];
         this.currentPage = 1;
       },
       error: (err) => {

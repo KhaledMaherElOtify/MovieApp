@@ -15,4 +15,13 @@ export class Fetch {
   getMovies(): Observable<any> {
     return this._HttpClient.get(`${URL}/movie/popular?api_key=${Api_key}`);
   }
+
+  getMovieById(id: number): Observable<any> {
+    return this._HttpClient.get(`${URL}/movie/${id}?api_key=${Api_key}&language=en-US`);
+  }
+
+  getSimilarMovies(id: number, page: number = 1): Observable<any> {
+    return this._HttpClient.get(`${URL}/movie/${id}/similar?api_key=${Api_key}&language=en-US&page=${page}`);
+  }
+
 }

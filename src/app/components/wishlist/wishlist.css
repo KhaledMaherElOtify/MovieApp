@@ -1,0 +1,24 @@
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.btn-sm {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.fa-heart {
+  font-size: 1.2rem;
+}
+
+.badge {
+  font-size: 0.8rem;
+} 
