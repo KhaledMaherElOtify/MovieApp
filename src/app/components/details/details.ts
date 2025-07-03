@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Fetch } from '../../Service/fetch';
 import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
+import { WishlistService } from '../../Service/wishlist.service';
 
 @Component({
   selector: 'App-details',
@@ -26,7 +27,8 @@ export class MovieDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fetch: Fetch,
-    private location: Location
+    private location: Location,
+    private wishlistService: WishlistService
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +37,7 @@ export class MovieDetailsComponent implements OnInit {
       if (id) {
         this.fetch.getMovieById(id).subscribe(movie => {
           this.movie = movie;
+          this.isFavorite = this.wishlistService.isInWishlist(id);
         });
         this.loadSimilarMovies(id, 1);
       }
@@ -62,11 +65,8 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   toggleFavorite() {
-    this.isFavorite = !this.isFavorite;
-  }
-
-  goBack() {
-    this.location.back();
+    this.wishlistService.toggleWishlist(this.movie);
+    this.isFavorite = this.wishlistService.isInWishlist(this.movie.id);
   }
 
   getGenreName(id: number): string {

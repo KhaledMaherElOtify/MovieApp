@@ -38,7 +38,6 @@ export class WishlistService {
     this.wishlistItems = this.wishlistItems.filter(movie => movie.id !== movieId);
     this.updateWishlist();
   }
-
   // Toggle movie in wishlist
   toggleWishlist(movie: IMovie): void {
     if (this.isInWishlist(movie.id)) {
