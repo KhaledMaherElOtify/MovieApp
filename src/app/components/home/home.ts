@@ -15,11 +15,9 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
-export class Home implements OnInit, OnDestroy {
+export class Home implements OnInit {
 
   MovieList: IMovie[] = [];
-  wishlistCount: number = 0;
-  private subscription: Subscription = new Subscription();
 
   suggestedMovies: IMovie[] = [];
   searchResults: IMovie[] = [];
@@ -33,15 +31,6 @@ export class Home implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadMovies();
-    this.subscription.add(
-      this.wishlistService.getWishlistCount().subscribe(count => {
-        this.wishlistCount = count;
-      })
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   loadMovies(): void {
@@ -61,11 +50,6 @@ export class Home implements OnInit, OnDestroy {
 
   isInWishlist(movieId: number): boolean {
     return this.wishlistService.isInWishlist(movieId);
-  }
-
-  goToWishlist(): void {
-    this.router.navigate(['/wishlist']);
-    this.loadNowPlayingMovies();
   }
 
   loadNowPlayingMovies() {

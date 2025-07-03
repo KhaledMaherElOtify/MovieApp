@@ -62,26 +62,21 @@ export class Register {
         email,
         createdAt: new Date()
       });
-
-     this.successMessage = 'Account created successfully!';
-
-
-  setTimeout(() => {
-  this.successMessage = '';
-  this.registerForm.reset();
-  this.submitted = false;
-  this.router.navigate(['/login']); 
-},);
-
-
-      
+      this.successMessage = 'Account created successfully!';
+      setTimeout(() => {
+        this.successMessage = '';
+        this.registerForm.reset();
+        this.submitted = false;
+        this.router.navigate(['/login']);
+      }, 2000);
     } catch (error: any) {
-  if (error.code === 'auth/email-already-in-use') {
-    this.errorMessage = 'This email already exists.';
-  } else {
-    this.errorMessage = 'An error occurred. Please try again.';
-  }
-}
+      if (error.code === 'auth/email-already-in-use') {
+        this.errorMessage = 'This email already exists.';
+      } else {
+        this.errorMessage = 'An error occurred. Please try again.';
+      }
+      console.error('Registration error:', error);
+    }
 
   }
 

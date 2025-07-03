@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
-import { Register } from './pages/register/register';
-import { Home } from './components/home/home';
+import { isAuthenticatedGuard } from './guards/is-authenticated-guard';
 
 export const routes: Routes = [
   { 
@@ -11,27 +10,30 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () =>
-    import('./components/home/home').then(m => m.Home)
+    import('./components/home/home').then(m => m.Home), 
+    canActivate: [isAuthenticatedGuard]
   },
   {
     path: 'register',
     loadComponent: () =>
-      import('./pages/register/register').then(m => m.Register)
+      import('./components/register/register').then(m => m.Register)
   },
   {
     path: 'login',
     loadComponent: () =>
-      import('./pages/login/login').then(m => m.Login)
+      import('./components/login/login').then(m => m.Login)
   },
   {
     path: 'wishlist',
     loadComponent: () =>
-      import('./components/wishlist/wishlist').then(m => m.Wishlist)
+      import('./components/wishlist/wishlist').then(m => m.Wishlist),
+    canActivate: [isAuthenticatedGuard]
   },
   {
     path: 'details/:id',
     loadComponent: () =>
-      import('./components/details/details').then(m => m.MovieDetailsComponent)
+      import('./components/details/details').then(m => m.MovieDetailsComponent),
+    canActivate: [isAuthenticatedGuard]
   },
     
    { path: '**', redirectTo: '' }

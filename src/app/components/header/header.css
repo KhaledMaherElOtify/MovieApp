@@ -1,0 +1,39 @@
+.navbar-brand {
+  font-size: 1.7rem;
+  letter-spacing: 1px;
+}
+.nav-link {
+  color: #333 !important;
+  transition: color 0.2s;
+}
+.nav-link:hover, .nav-link:focus {
+  color: #0056b3 !important;
+}
+.avatar img {
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.avatar-initials {
+  font-weight: bold;
+  font-size: 1.1rem;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: #6c757d;
+}
+.badge {
+  font-size: 0.75rem;
+  padding: 0.4em 0.6em;
+}
+.dropdown-menu {
+  min-width: 8rem;
+}
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    gap: 0.5rem !important;
+  }
+}

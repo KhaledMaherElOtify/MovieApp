@@ -1,0 +1,62 @@
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light bg-warning px-3 px-md-5">
+  <a class="navbar-brand fw-bold" routerLink="/">Movie App</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarContent">
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2 gap-lg-3">
+      <li class="nav-item" *ngIf="isAuthenticated">
+        <a class="nav-link" routerLink="/">Home</a>
+      </li>
+      <li class="nav-item" *ngIf="isAuthenticated">
+        <a class="nav-link position-relative" routerLink="/wishlist" aria-label="Wishlist">
+          <i class="fa fa-heart"></i>
+          <span *ngIf="wishlistCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ wishlistCount }}
+          </span>
+        </a>
+      </li>
+      <li class="nav-item dropdown" *ngIf="isAuthenticated">
+        <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          En
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="langDropdown">
+          <li><a class="dropdown-item" href="#">Ar</a></li>
+          <li><a class="dropdown-item" href="#">En</a></li>
+          <li><a class="dropdown-item" href="#">Fr</a></li>
+          <li><a class="dropdown-item" href="#">Es</a></li>
+        </ul>
+      </li>
+      <ng-container *ngIf="isAuthenticated; else guestLinks">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="avatar me-2" *ngIf="user?.photoURL; else initials">
+              <img [src]="user?.photoURL" alt="User Avatar" class="rounded-circle" width="32" height="32">
+            </span>
+            <ng-template #initials>
+              <span class="avatar-initials rounded-circle bg-secondary text-white d-inline-flex justify-content-center align-items-center" style="width:32px;height:32px;">
+                {{ user?.displayName ? user?.displayName?.charAt(0) : (user?.email ? user?.email?.charAt(0)?.toUpperCase() : '?') }}
+              </span>
+            </ng-template>
+            <span class="ms-1">{{ user?.displayName ?? user?.email }}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" 
+              routerLink="/">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a></li>
+          </ul>
+        </li>
+      </ng-container>
+      <ng-template #guestLinks>
+        <li class="nav-item">
+          <a routerLink="/login" class="nav-link">Login</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/register" class="nav-link">Register</a>
+        </li>
+      </ng-template>
+    </ul>
+  </div>
+</nav>
