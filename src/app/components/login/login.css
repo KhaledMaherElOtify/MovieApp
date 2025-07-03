@@ -1,3 +1,12 @@
+body, :host {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+:host {
+  transition: background 0.3s, color 0.3s;
+}
+
 .forgot-link {
   color: #6c757d; 
   text-decoration: none;

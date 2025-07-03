@@ -1,3 +1,13 @@
+body, :host {
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+:host {
+  transition: background 0.3s, color 0.3s;
+}
+
 .card {
   transition: transform 0.2s ease-in-out;
 }

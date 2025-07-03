@@ -1,3 +1,17 @@
+body, :host {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+:host {
+  transition: background 0.3s, color 0.3s;
+}
+.search-input {
+  background: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  transition: background 0.3s, color 0.3s;
+}
+
 
 .card-img-top {
   object-fit: fill;

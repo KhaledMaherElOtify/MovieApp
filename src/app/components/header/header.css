@@ -1,10 +1,15 @@
+.navbar, :host {
+  background: var(--navbar-bg) !important;
+  color: var(--navbar-text) !important;
+  transition: background 0.3s, color 0.3s;
+}
+
 .navbar-brand {
   font-size: 1.7rem;
   letter-spacing: 1px;
 }
-.nav-link {
-  color: #333 !important;
-  transition: color 0.2s;
+.nav-link, .navbar-brand {
+  color: var(--navbar-text) !important;
 }
 .nav-link:hover, .nav-link:focus {
   color: #0056b3 !important;

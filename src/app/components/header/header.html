@@ -68,6 +68,11 @@
           <a routerLink="/register" class="nav-link">Register</a>
         </li>
       </ng-template>
+      <li class="nav-item d-flex align-items-center">
+        <button class="btn btn-sm btn-outline-secondary ms-2" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+          <i class="fa" [ngClass]="isDarkMode ? 'fa-sun' : 'fa-moon'"></i>
+        </button>
+      </li>
     </ul>
   </div>
 </nav>

@@ -3,5 +3,60 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-/* @import url('node_modules/bootstrap/dist/css/bootstrap.min.css');
-@import url('node_modules/@fortawesome/fontawesome-free/css/all.min.css'); */
+
+/* Light mode (default) */
+:root {
+  --bg-color: #fff;
+  --text-color: #222;
+  --navbar-bg: #ffc107;
+  --navbar-text: #222;
+  --footer-bg: #222;
+  --footer-text: #fff;
+  --card-bg: #fff;
+  --card-shadow: rgba(0,0,0,0.05);
+}
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+.navbar {
+  background: var(--navbar-bg) !important;
+  color: var(--navbar-text) !important;
+}
+
+/* Dark mode */
+.dark-mode {
+  --bg-color: #181a1b;
+  --text-color: #f1f1f1;
+  --navbar-bg: #23272b;
+  --navbar-text: #f1f1f1;
+  --footer-bg: #23272b;
+  --footer-text: #f1f1f1;
+  --card-bg: #23272b;
+  --card-shadow: rgba(0,0,0,0.3);
+}
+.dark-mode body {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+.dark-mode .navbar {
+  background: var(--navbar-bg) !important;
+  color: var(--navbar-text) !important;
+}
+.dark-mode .nav-link, .dark-mode .navbar-brand {
+  color: var(--navbar-text) !important;
+}
+.dark-mode .dropdown-menu {
+  background: #23272b;
+  color: #f1f1f1;
+}
+.dark-mode .dropdown-item {
+  color: #f1f1f1;
+}
+.dark-mode .dropdown-item:hover {
+  background: #343a40;
+}
+
+body, .navbar, .card, .dropdown-menu {
+  transition: background 0.3s, color 0.3s;
+}
