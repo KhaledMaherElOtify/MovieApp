@@ -1,26 +1,19 @@
 
 .card-img-top {
-  height: 300px;
-  object-fit: cover;
+  object-fit: fill;
 }
-
-
 .card {
   transition: transform 0.2s ease-in-out;
 }
-
 .card:hover {
   transform: translateY(-5px);
 }
-
 .fa-heart {
   transition: all 0.2s ease-in-out;
 }
-
 .fa-heart:hover {
   transform: scale(1.1);
 }
-
 .badge {
   font-size: 0.7rem;
   min-width: 18px;
@@ -33,7 +26,6 @@
   font-size: 1.2rem;
   font-weight: bold;
 }
-
 .card {
   height: 100%; 
   display: flex;
@@ -55,10 +47,6 @@
   align-items: center;
   text-align: center;
   padding: 0.5rem;
-}
-.card-img-top {
-  height: 75%; 
-  object-fit: cover;
 }
 
 .pagination .page-item.active .page-link {
