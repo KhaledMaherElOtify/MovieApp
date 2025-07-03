@@ -8,7 +8,6 @@ import { RouterOutlet } from '@angular/router';
     <router-outlet></router-outlet>
   `,
 })
-
 export class App {
   protected title = 'MovieApp';
 }
