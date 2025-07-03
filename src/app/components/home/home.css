@@ -1,18 +1,80 @@
+
 .card-img-top {
   height: 300px;
   object-fit: cover;
 }
 
-.card-title {
-  font-size: 14px;
-  font-weight: bold;
+
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.fa-heart {
+  transition: all 0.2s ease-in-out;
+}
+
+.fa-heart:hover {
+  transform: scale(1.1);
 }
 
 .badge {
-  font-size: 0.9rem;
-  width: 40px;
-  height: 40px;
+  font-size: 0.7rem;
+  min-width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.card {
+  height: 100%; 
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+.card-body {
+  height: 25%; 
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem;
+}
+.card-img-top {
+  height: 75%; 
+  object-fit: cover;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #ffc107; /* Bootstrap warning color */
+  border-color: #ffc107;
+  color: #212529;
+  font-weight: bold;
+}
+
+.pagination .page-link {
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #f8f9fa;
+  color: #000;
 }

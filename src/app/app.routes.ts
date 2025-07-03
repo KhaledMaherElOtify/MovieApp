@@ -3,6 +3,16 @@ import { Register } from './pages/register/register';
 import { Home } from './components/home/home';
 
 export const routes: Routes = [
+  { 
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full' 
+  },
+  {
+    path: 'home',
+    loadComponent: () =>
+    import('./components/home/home').then(m => m.Home)
+  },
   {
     path: 'register',
     loadComponent: () =>
@@ -14,14 +24,15 @@ export const routes: Routes = [
       import('./pages/login/login').then(m => m.Login)
   },
   {
-    path: '',
-    redirectTo: 'register',
-    pathMatch: 'full'
+    path: 'wishlist',
+    loadComponent: () =>
+      import('./components/wishlist/wishlist').then(m => m.Wishlist)
   },
   {
-    path: 'home',
-  loadComponent: () =>
-    import('./components/home/home').then(m => m.Home)
+    path: 'details/:id',
+    loadComponent: () =>
+      import('./components/details/details').then(m => m.MovieDetailsComponent)
   },
-   
+    
+   { path: '**', redirectTo: '' }
 ];
