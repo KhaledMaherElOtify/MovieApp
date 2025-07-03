@@ -8,6 +8,17 @@ import { sendPasswordResetEmail } from '@angular/fire/auth';
 @Component({
   selector: 'app-login',
   imports: [FormsModule , ReactiveFormsModule,CommonModule,],
+  styles: [`
+    .forgot-link {
+      color: #6c757d;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .forgot-link:hover {
+      color: #ffc107 !important;
+      text-decoration: underline !important;
+    }
+  `],
   styleUrl: './login.css',
   templateUrl: './login.html'
 })
