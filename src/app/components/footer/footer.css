@@ -1,6 +1,10 @@
+:host, footer {
+  background: var(--footer-bg);
+  color: var(--footer-text);
+  transition: background 0.3s, color 0.3s;
+}
+
 .footer {
-  background-color: #1f2937;
-  color: #f3f4f6;
   padding: 2rem 1rem;
   text-align: center;
   font-family: 'Segoe UI', sans-serif;

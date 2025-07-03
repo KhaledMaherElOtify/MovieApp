@@ -1,0 +1,8 @@
+body, :host {
+  background: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+:host {
+  transition: background 0.3s, color 0.3s;
+}

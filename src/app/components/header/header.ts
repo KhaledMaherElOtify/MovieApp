@@ -16,6 +16,7 @@ export class Header implements OnInit {
     wishlistCount: number = 0;
     isAuthenticated: boolean = false;
     user: User | null = null;
+    isDarkMode: boolean = false;
 
   constructor(private router: Router,
       private wishlistService: WishlistService,
@@ -33,6 +34,7 @@ export class Header implements OnInit {
         this.user = user;
       })
     );
+    this.initTheme();
   }
   goToWishlist(): void {
     this.router.navigate(['/wishlist']);
@@ -43,5 +45,31 @@ export class Header implements OnInit {
     }).catch(error => {
       console.error('Logout failed', error);
     });
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    this.applyTheme();
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+  }
+
+  private initTheme(): void {
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      this.isDarkMode = saved === 'dark';
+    } else {
+      // Use system preference if no saved theme
+      this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    this.applyTheme();
+  }
+
+  private applyTheme(): void {
+    const html = document.documentElement;
+    if (this.isDarkMode) {
+      html.classList.add('dark-mode');
+    } else {
+      html.classList.remove('dark-mode');
+    }
   }
 }

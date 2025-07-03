@@ -24,7 +24,7 @@
     </div>
     <div class="col-md-8">
       <h2>{{ movie.title }}</h2>
-      <p class="text-muted">{{ movie.release_date | date }}</p>
+      <p>{{ movie.release_date | date }}</p>
       <div class="mb-2">
         <span *ngFor="let g of movie.genres" class="badge bg-warning me-1 rounded-pill text-dark fw-small small">{{ g.name }}</span>
       </div>
@@ -71,7 +71,7 @@
                 {{ sim.vote_average | number:'1.1-1' }}
               </div>
               <div class="mt-2">
-                <span *ngFor="let g of sim.genre_ids" class="badge bg-info me-1 rounded-pill text-white fw-small small">{{ getGenreName(g) }}</span>
+                <span *ngFor="let g of sim.genre_ids" class="badge bg-info mb-1 me-1 rounded-pill text-white fw-small small">{{ getGenreName(g) }}</span>
               </div>
             </div>
             <div class="sim-overlay">

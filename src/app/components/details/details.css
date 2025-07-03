@@ -1,5 +1,14 @@
+body, :host {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Add transition for smooth theme switching */
+:host {
+  transition: background 0.3s, color 0.3s;
+}
+
 .container {
-  background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.08);
   padding: 2rem;
@@ -28,9 +37,7 @@ img.img-fluid {
   box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 .card-img-top {
-  height: 320px;
-  object-fit: cover;
-  border-radius: 12px 12px 0 0;
+    object-fit: fill;
 }
 .card-title {
   font-weight: 600;

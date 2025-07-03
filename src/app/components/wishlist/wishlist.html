@@ -3,7 +3,7 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold mb-0">My Wishlist</h4>
     <div class="d-flex gap-2">
-      <span class="badge bg-warning text-dark fs-6">{{ wishlistItems.length }} movies</span>
+      <span class="badge bg-warning fs-6">{{ wishlistItems.length }} movies</span>
       <button 
       *ngIf="wishlistItems.length > 0"
       class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" 
@@ -17,10 +17,10 @@
   <!-- Empty State -->
   <div *ngIf="wishlistItems.length === 0" class="text-center py-5">
     <div class="mb-4">
-      <i class="fa fa-heart text-muted" style="font-size: 4rem;"></i>
+      <i class="fa fa-heart" style="font-size: 4rem;"></i>
     </div>
-    <h5 class="text-muted mb-3">Your wishlist is empty</h5>
-    <p class="text-muted mb-4">Start adding movies to your wishlist to see them here!</p>
+    <h5 class="mb-3">Your wishlist is empty</h5>
+    <p class="mb-4">Start adding movies to your wishlist to see them here!</p>
     <button class="btn btn-warning" (click)="goToHome()">
       Browse Movies
     </button>
