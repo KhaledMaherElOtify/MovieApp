@@ -1,31 +1,32 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
-import { Fetch } from '../../Service/fetch';
-import { WishlistService } from '../../Service/wishlist.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { IMovie } from '../../Models/imovie';
+import { WishlistService } from '../../Service/wishlist.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-wishlist',
   imports: [CommonModule],
-  templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  templateUrl: './wishlist.html',
+  styleUrls: ['./wishlist.css']
 })
-export class Home implements OnInit, OnDestroy {
-
-  MovieList: IMovie[] = [];
+export class Wishlist implements OnInit, OnDestroy {
+  wishlistItems: IMovie[] = [];
   wishlistCount: number = 0;
   private subscription: Subscription = new Subscription();
 
   constructor(
-    private _Fetch: Fetch,
     private wishlistService: WishlistService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadMovies();
+    this.subscription.add(
+      this.wishlistService.getWishlistItems().subscribe(items => {
+        this.wishlistItems = items;
+      })
+    );
     this.subscription.add(
       this.wishlistService.getWishlistCount().subscribe(count => {
         this.wishlistCount = count;
@@ -37,15 +38,8 @@ export class Home implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  loadMovies(): void {
-    this._Fetch.getMovies().subscribe({
-      next: (res) => {
-        this.MovieList = res.results;
-      },
-      error: (err) => {
-        console.error('Error fetching movies:', err);
-      }
-    });
+  removeFromWishlist(movie: IMovie): void {
+    this.wishlistService.removeFromWishlist(movie.id);
   }
 
   toggleWishlist(movie: IMovie): void {
@@ -56,7 +50,11 @@ export class Home implements OnInit, OnDestroy {
     return this.wishlistService.isInWishlist(movieId);
   }
 
-  goToWishlist(): void {
-    this.router.navigate(['/wishlist']);
+  clearWishlist(): void {
+    this.wishlistService.clearWishlist();
   }
-}
+
+  goToHome(): void {
+    this.router.navigate(['/']);
+  }
+} 

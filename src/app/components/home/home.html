@@ -13,7 +13,12 @@
         <li><a class="dropdown-item" href="#">Es</a></li>
       </ul>
     </div>
-    <a href="#" class="text-dark">watchlist</a>
+    <a href="javascript:void(0)" class="text-dark position-relative" (click)="goToWishlist()">
+      Wishlist
+      <span *ngIf="wishlistCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        {{ wishlistCount }}
+      </span>
+    </a>
   </div>
 </nav>
 
@@ -50,8 +55,15 @@
               {{ movie.release_date | date: 'MMM dd, yyyy' }}
             </small>
             <div class="d-flex align-items-center gap-2">
-              <i class="fa fa-heart text-warning"></i>
-              <i class="fa-regular fa-heart"></i>
+              <i 
+                class="fa-heart" 
+                [class.fa-solid]="isInWishlist(movie.id)"
+                [class.fa-regular]="!isInWishlist(movie.id)"
+                [class.text-warning]="isInWishlist(movie.id)"
+                [class.text-muted]="!isInWishlist(movie.id)"
+                (click)="toggleWishlist(movie)"
+                style="cursor: pointer; font-size: 1.2rem;">
+              </i>
             </div>
           </div>
         </div>

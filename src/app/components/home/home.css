@@ -8,10 +8,26 @@
   font-weight: bold;
 }
 
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.fa-heart {
+  transition: all 0.2s ease-in-out;
+}
+
+.fa-heart:hover {
+  transform: scale(1.1);
+}
+
 .badge {
-  font-size: 0.9rem;
-  width: 40px;
-  height: 40px;
+  font-size: 0.7rem;
+  min-width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
