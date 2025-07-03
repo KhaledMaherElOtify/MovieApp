@@ -1,0 +1,90 @@
+<div *ngIf="movie.backdrop_path" class="backdrop-banner" [style.backgroundImage]="'url(' + 'https://image.tmdb.org/t/p/w1280' + movie.backdrop_path + ')'"
+>
+  <div class="backdrop-overlay">
+    <h1 class="movie-title">{{ movie.title }}</h1>
+    <p class="tagline" *ngIf="movie.tagline">{{ movie.tagline }}</p>
+  </div>
+</div>
+
+<div class="container mt-5" *ngIf="movie">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-outline-secondary" (click)="goBack()">⬅ Back</button>
+    <button class="btn btn-outline-danger favorite-btn" [class.favorited]="isFavorite" (click)="toggleFavorite()">
+      <span *ngIf="!isFavorite">♡ Favorite</span>
+      <span *ngIf="isFavorite">♥ Favorited</span>
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" class="img-fluid rounded shadow" />
+      <div class="mt-3">
+        <a *ngIf="movie.imdb_id" [href]="'https://www.imdb.com/title/' + movie.imdb_id" target="_blank" class="btn btn-dark btn-sm me-2">IMDb</a>
+        <a *ngIf="movie.homepage" [href]="movie.homepage" target="_blank" class="btn btn-warning btn-sm">Official Site</a>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <h2>{{ movie.title }}</h2>
+      <p class="text-muted">{{ movie.release_date | date }}</p>
+      <div class="mb-2">
+        <span *ngFor="let g of movie.genres" class="badge bg-warning me-1 rounded-pill text-dark fw-small small">{{ g.name }}</span>
+      </div>
+      <p><strong>Status:</strong> {{ movie.status }}</p>
+      <p><strong>Rating:</strong> {{ movie.vote_average | number:'1.1-1' }} ({{ movie.vote_count }} votes)</p>
+      <p><strong>Duration:</strong> {{ movie.runtime }} min</p>
+      <p><strong>Language(s):</strong>
+        <span *ngFor="let lang of movie.spoken_languages; let last = last">{{ lang.english_name }}<span *ngIf="!last">, </span></span>
+      </p>
+      <p class="mt-3">{{ movie.overview }}</p>
+      <div class="mt-3">
+        <h6>Production Companies</h6>
+        <div *ngFor="let pc of movie.production_companies" class="d-inline-block me-3 mb-2">
+          <img *ngIf="pc.logo_path" [src]="'https://image.tmdb.org/t/p/w92' + pc.logo_path" [alt]="pc.name" class="me-1" style="height: 32px; vertical-align: middle;">
+          <span>{{ pc.name }}</span>
+        </div>
+      </div>
+      <div class="mt-3">
+        <h6>Production Countries</h6>
+        <span *ngFor="let c of movie.production_countries" class="badge bg-secondary me-1">{{ c.name }}</span>
+      </div>
+      <div class="mt-3">
+        <h6>Financials</h6>
+        <p><strong>Budget:</strong> {{ movie.budget | currency:'USD':'symbol' }}</p>
+        <p><strong>Revenue:</strong> {{ movie.revenue | currency:'USD':'symbol' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-5" />
+
+  <div *ngIf="similarMovies.length">
+    <h4>Similar Movies</h4>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 mt-2">
+      <div class="col" *ngFor="let sim of similarMovies">
+        <a [routerLink]="['/details', sim.id]" class="sim-card-link">
+          <div class="card h-100 border-0 shadow-sm sim-card position-relative">
+            <img [src]="sim.poster_path ? 'https://image.tmdb.org/t/p/w500' + sim.poster_path : 'assets/placeholder.png'"
+                 class="card-img-top" [alt]="sim.title" />
+            <div class="card-body">
+              <h6 class="card-title mb-1">{{ sim.title }}</h6>
+              <small class="text-muted">{{ sim.release_date ? (sim.release_date | date:'yyyy') : 'N/A' }}</small>
+              <div class="badge bg-dark text-warning rounded-circle mx-2 mt-2 p-2">
+                {{ sim.vote_average | number:'1.1-1' }}
+              </div>
+              <div class="mt-2">
+                <span *ngFor="let g of sim.genre_ids" class="badge bg-info me-1 rounded-pill text-white fw-small small">{{ getGenreName(g) }}</span>
+              </div>
+            </div>
+            <div class="sim-overlay">
+              <span>{{ sim.overview || 'No overview available.' }}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center mt-3">
+      <button class="btn btn-outline-primary me-2" (click)="prevSimilarPage()" [disabled]="similarPage === 1">Previous</button>
+      <span>Page {{ similarPage }} of {{ similarTotalPages }}</span>
+      <button class="btn btn-outline-primary ms-2" (click)="nextSimilarPage()" [disabled]="similarPage === similarTotalPages">Next</button>
+    </div>
+  </div>
+</div>
