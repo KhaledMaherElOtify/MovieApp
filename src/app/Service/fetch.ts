@@ -20,11 +20,13 @@ export class Fetch {
 
 
   getMovieById(id: number): Observable<any> {
-    return this._HttpClient.get(`${URL}/movie/${id}?api_key=${Api_key}&language=en-US`);
+     const language = this.movieService.getCurrentLanguage();
+    return this._HttpClient.get(`${URL}/movie/${id}?api_key=${Api_key}&language=${language}`);
   }
 
   getSimilarMovies(id: number, page: number = 1): Observable<any> {
-    return this._HttpClient.get(`${URL}/movie/${id}/similar?api_key=${Api_key}&language=en-US&page=${page}`);
+    const language = this.movieService.getCurrentLanguage();
+    return this._HttpClient.get(`${URL}/movie/${id}/similar?api_key=${Api_key}&language=${language}&page=${page}`);
   }
 
 }

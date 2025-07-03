@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MovieService } from '../../Service/movie-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -16,17 +17,17 @@ import { MovieService } from '../../Service/movie-service';
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
-export class Home implements OnInit {
-
+export class Home implements OnInit, OnDestroy {
   MovieList: IMovie[] = [];
   searchResults: IMovie[] = [];
-
+  language: string = 'en-US'; // Initialize with default language
   searchTerm: string = '';
   currentPage: number = 1;
   totalPages: number = 1;
   itemsPerPage: number = 8;
   genres: { id: number; name: string }[] = [];
   selectedGenreId: string = '';
+  private subscription: Subscription = new Subscription();
 
   private API_KEY = '943a1d14054f1dcc52c2bc72de292ab7';
   movies: IMovie[] = [];
@@ -40,11 +41,17 @@ export class Home implements OnInit {
 
   ngOnInit(): void {
     this.loadGenres();
-     this.movieService.language$.subscribe(() => {
-  this.loadNowPlayingMovies(this.currentPage);
-});
+    this.subscription.add(
+      this.movieService.language$.subscribe(lang => {
+        this.language = lang;
+        this.loadNowPlayingMovies(this.currentPage);
+      })
+    );
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   get activeData(): IMovie[] {
     return this.searchResults.length > 0 ? this.searchResults : this.MovieList;
@@ -70,10 +77,10 @@ export class Home implements OnInit {
   }
 
   loadMovies(): void {
-  this.movieService.getNowPlaying().subscribe(movies => {
-    this.movies = movies;
-  });
-}
+    this.movieService.getNowPlaying().subscribe(movies => {
+      this.movies = movies;
+    });
+  }
 
   loadNowPlayingMovies(page: number): void {
     this._Fetch.getMovies(page).subscribe({
@@ -87,6 +94,7 @@ export class Home implements OnInit {
       }
     });
   }
+
   onSearchChange(): void {
     if (this.searchTerm.trim().length < 2) {
       this.searchResults = [];
@@ -102,7 +110,7 @@ export class Home implements OnInit {
   performSearch(query: string, page: number): void {
     const encodedQuery = encodeURIComponent(query);
     this.http
-      .get<any>(`https://api.themoviedb.org/3/search/movie?query=${encodedQuery}&api_key=${this.API_KEY}&page=${page}`)
+      .get<any>(`https://api.themoviedb.org/3/search/movie?query=${encodedQuery}&api_key=${this.API_KEY}&page=${page}&language=${this.language}`)
       .subscribe(res => {
         this.searchResults = res.results;
         this.totalPages = res.total_pages;
@@ -126,15 +134,15 @@ export class Home implements OnInit {
   }
 
   loadGenres(): void {
-  this.http
-    .get<any>(`https://api.themoviedb.org/3/genre/movie/list?api_key=${this.API_KEY}`)
-    .subscribe({
-      next: (res) => this.genres = res.genres,
-      error: (err) => console.error('Failed to load genres', err)
-    });
-}
-filterByGenre(): void {
-  this.movieService.language$.subscribe((lang) => {
+    this.http
+      .get<any>(`https://api.themoviedb.org/3/genre/movie/list?api_key=${this.API_KEY}&language=${this.language}`)
+      .subscribe({
+        next: (res) => this.genres = res.genres,
+        error: (err) => console.error('Failed to load genres', err)
+      });
+  }
+
+  filterByGenre(): void {
     if (!this.selectedGenreId) {
       if (this.searchTerm.trim()) {
         this.performSearch(this.searchTerm, 1);
@@ -145,7 +153,7 @@ filterByGenre(): void {
     }
 
     this.http
-      .get<any>(`https://api.themoviedb.org/3/discover/movie?with_genres=${this.selectedGenreId}&api_key=${this.API_KEY}&language=${lang}&page=1`)
+      .get<any>(`https://api.themoviedb.org/3/discover/movie?with_genres=${this.selectedGenreId}&api_key=${this.API_KEY}&language=${this.language}&page=1`)
       .subscribe({
         next: (res) => {
           this.searchResults = res.results;
@@ -156,8 +164,5 @@ filterByGenre(): void {
           console.error('Failed to filter by genre', err);
         }
       });
-  });
-}
-
-
+  }
 }

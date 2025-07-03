@@ -94,7 +94,7 @@ body, :host {
   margin-bottom: 1rem;
 }
 
-.genre-dropdown {
+.genre-dropdown-wrapper {
   background-color: #fff8e1; 
   color: #212529;
   border: 1px solid #ffc107;
@@ -103,16 +103,16 @@ body, :host {
   width: auto;
   min-width: 180px;
   font-weight: 500;
+  
 }
 
-.genre-dropdown:hover {
+.genre-dropdown-wrapper:hover {
   border-color: #ffca2c;
   box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
   cursor: pointer;
 }
 
-/* Selected option */
-.genre-dropdown:focus {
+.genre-dropdown-wrapper:focus {
   border-color: #ffb300;
   outline: none;
   box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.4);

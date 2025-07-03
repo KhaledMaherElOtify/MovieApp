@@ -1,20 +1,24 @@
-<!-- Intro Section -->
 <section class="bg-light p-5 m-5 text-center search-input">
-  <h2>Welcome to our movie app</h2>
-  <p>Millions of movies, TV shows and people to discover. Explore now.</p>
+  <h2>
+    {{ language === 'ar-SA' ? 'مرحبًا بك في تطبيق الأفلام الخاص بنا' : 'Welcome to our movie app' }}
+  </h2>
+  <p>
+    {{ language === 'ar-SA' ? 'ملايين الأفلام والعروض والأشخاص للاكتشاف. استكشف الآن.' : 'Millions of movies, TV shows and people to discover. Explore now.' }}
+  </p>
 
-  <!-- Search Input -->
   <div class="d-flex justify-content-center mt-4">
     <div class="position-relative w-50">
       <input
         type="text"
         class="form-control me-2"
-        placeholder="Search and explore..."
+        [placeholder]="language === 'ar-SA' ? 'ابحث واستكشف...' : 'Search and explore...'"
         [(ngModel)]="searchTerm"
         (input)="onSearchChange()" />
     </div>
 
-    <button class="btn btn-warning ms-2" (click)="clearSearch()">Clear</button>
+    <button class="btn btn-warning ms-2" (click)="clearSearch()">
+      {{ language  === 'ar-SA' ? 'مسح' : 'Clear' }}
+    </button>
   </div>
 </section>
 
@@ -23,18 +27,24 @@
 
 <!-- Results Section -->
 <section class="container mt-5">
-<div class="d-flex justify-content-between align-items-center mb-3 px-3">
-  <h4 class="fw-bold mb-0">
-    {{ searchResults.length > 0 ? 'Search Results' : 'Now Playing' }}
-  </h4>
-
-  <div class="genre-dropdown-wrapper" style="width: 200px;">
+<div class="mb-3 px-3">
+  <div class="text-center">
+    <h4 class="fw-bold mb-3">
+      {{ language === 'ar-SA' ? (searchResults.length > 0 ? 'نتائج البحث' : 'يُعرض الآن') : (searchResults.length > 0 ? 'Search Results' : 'Now Playing') }}
+    </h4>
+  </div>
+  <div class="genre-dropdown-wrapper ms-auto" style="width: 200px;">
     <select class="form-select" [(ngModel)]="selectedGenreId" (change)="filterByGenre()">
-      <option value="">All Genres</option>
-      <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
+      <option value="">
+        {{ language === 'ar-SA' ? 'كل الأنواع' : 'All Genres' }}
+      </option>
+      <option *ngFor="let genre of genres" [value]="genre.id">
+        {{ genre.name }}
+      </option>
     </select>
   </div>
 </div>
+
 
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
     <div class="col" *ngFor="let movie of activeData">
@@ -78,10 +88,11 @@
 
     <!-- Prev -->
     <li class="page-item" [class.disabled]="currentPage === 1">
-      <button class="page-link text-dark" (click)="changePage(currentPage - 1)">
-        <i class="bi bi-chevron-left"></i> Prev
-      </button>
-    </li>
+  <button button class="page-link text-dark" (click)="changePage(currentPage - 1)">
+    <i class="bi bi-chevron-left"></i>
+    {{ language === 'ar-SA' ? 'السابق' : 'Prev' }}
+    </button>
+  </li>
 
     <!-- Pages -->
     <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
@@ -93,8 +104,9 @@
     <!-- Next -->
     <li class="page-item" [class.disabled]="currentPage === totalPages">
       <button class="page-link text-dark" (click)="changePage(currentPage + 1)">
-        Next <i class="bi bi-chevron-right"></i>
-      </button>
-    </li>
+      {{ language === 'ar-SA' ? 'التالي' : 'Next' }}
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </li>
   </ul>
 </nav>

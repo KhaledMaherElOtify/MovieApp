@@ -18,6 +18,7 @@ export class Header implements OnInit {
     isAuthenticated: boolean = false;
     user: User | null = null;
     isDarkMode: boolean = false;
+    
 
     availableLanguages = [
     { code: 'en-US', name: 'En' },
