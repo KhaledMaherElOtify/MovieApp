@@ -1,82 +1,32 @@
-<!-- Header -->
-<nav class="navbar navbar-expand-lg navbar-light bg-warning px-5">
-  <a class="navbar-brand fw-bold" href="#">Movie App</a>
-  <div class="ms-auto d-flex align-items-center gap-3">
-    <div class="dropdown">
-      <a class="dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">
-        En
-      </a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Ar</a></li>
-        <li><a class="dropdown-item" href="#">En</a></li>
-        <li><a class="dropdown-item" href="#">Fr</a></li>
-        <li><a class="dropdown-item" href="#">Es</a></li>
-      </ul>
-    </div>
-    <a href="javascript:void(0)" class="text-dark position-relative" (click)="goToWishlist()">
-      Wishlist
-      <span *ngIf="wishlistCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-        {{ wishlistCount }}
-      </span>
-    </a>
-  </div>
-</nav>
-
-<!-- about Section -->
-<section class="bg-light p-5 m-5  text-center">
+<!-- Intro Section -->
+<section class="bg-light p-5 m-5 text-center">
   <h2>Welcome to our movie app</h2>
   <p class="text-muted">Millions of movies, TV shows and people to discover. Explore now.</p>
-<!-- 🔍 Search Input and Suggestions -->
-<div class="d-flex justify-content-center mt-4">
-  <div class="position-relative w-50">
-    <input
-      type="text"
-      class="form-control me-2"
-      placeholder="Search and explore..."
-      [(ngModel)]="searchTerm"
-      (input)="onSearchChange()" />
 
-    <!-- <ul class="list-group position-absolute w-100 mt-1 z-3" *ngIf="suggestedMovies.length">
-      <li
-        class="list-group-item list-group-item-action"
-        *ngFor="let movie of suggestedMovies"
-        (click)="searchTerm = movie.title; onSearchChange();">
-        {{ movie.title }}
-      </li>
-    </ul> -->
-  </div>
-
-  <button class="btn btn-warning ms-2" (click)="clearSearch()">Clear</button>
-</div>
-
-<section class="container mt-5" *ngIf="searchResults.length > 0">
-  <h4 class="fw-bold mb-3 text-start">Search Results</h4>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-1">
-    <div class="col" *ngFor="let movie of searchResults">
-      <div class="card h-100 d-flex flex-column border-0 shadow-sm">
-        <div class="position-relative">
-          <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
-               class="card-img-top"
-               alt="Movie Poster" />
-          <span class="position-absolute top-0 start-0 badge bg-dark text-warning m-2 rounded-circle p-2">
-            {{ movie.vote_average }}
-          </span>
-        </div>
-        <div class="card-body d-flex flex-column justify-content-between">
-          <h6 class="card-title mb-2">{{ movie.title }}</h6>
-          <p class="text-muted small">{{ movie.release_date | date: 'MMM dd, yyyy' }}</p>
-          <button class="btn btn-warning">Details</button>
-        </div>
-      </div>
+  <!-- Search Input -->
+  <div class="d-flex justify-content-center mt-4">
+    <div class="position-relative w-50">
+      <input
+        type="text"
+        class="form-control me-2"
+        placeholder="Search and explore..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()" />
     </div>
+
+    <button class="btn btn-warning ms-2" (click)="clearSearch()">Clear</button>
   </div>
 </section>
 
-<section class="container mt-5" *ngIf="searchResults.length === 0">
-  <h4 class="fw-bold mb-3 text-start">Now Playing</h4>
+<!-- Results Section -->
+<section class="container mt-5">
+  <h4 class="fw-bold mb-3 text-start">
+    {{ searchResults.length > 0 ? 'Search Results' : 'Now Playing' }}
+  </h4>
+
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
-    <div class="col" *ngFor="let movie of paginatedMovies">
-      <div class="card h-100 d-flex flex-column border-0 shadow-sm">
+    <div class="col" *ngFor="let movie of activeData">
+      <div class="card h-100 border-0 shadow-sm">
         <div class="position-relative">
           <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
                class="card-img-top"
@@ -91,45 +41,40 @@
             <small class="text-muted">
               {{ movie.release_date | date: 'MMM dd, yyyy' }}
             </small>
-            <div class="d-flex align-items-center gap-2">
-              <i 
-                class="fa-heart" 
-                [class.fa-solid]="isInWishlist(movie.id)"
-                [class.fa-regular]="!isInWishlist(movie.id)"
-                [class.text-warning]="isInWishlist(movie.id)"
-                [class.text-muted]="!isInWishlist(movie.id)"
-                (click)="toggleWishlist(movie)"
-                style="cursor: pointer; font-size: 1.2rem;">
-              </i>
-            </div>
+            <i class="fa-heart"
+               [class.fa-solid]="isInWishlist(movie.id)"
+               [class.fa-regular]="!isInWishlist(movie.id)"
+               [class.text-warning]="isInWishlist(movie.id)"
+               [class.text-muted]="!isInWishlist(movie.id)"
+               (click)="toggleWishlist(movie)"
+               style="cursor: pointer; font-size: 1.2rem;">
+            </i>
           </div>
-          <p class="text-muted small">{{ movie.release_date | date: 'MMM dd, yyyy' }}</p>
-          <button class="btn btn-warning">Details</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-
-  <!-- pagination part -->
-  <!-- Pagination Controls -->
-<nav class="mt-5 d-flex justify-content-center">
+<!-- Pagination -->
+<nav class="mt-5 d-flex justify-content-center" *ngIf="totalPages > 1">
   <ul class="pagination pagination-sm">
+
+    <!-- Prev -->
     <li class="page-item" [class.disabled]="currentPage === 1">
       <button class="page-link text-dark" (click)="changePage(currentPage - 1)">
         <i class="bi bi-chevron-left"></i> Prev
       </button>
     </li>
 
-    <li class="page-item"
-        *ngFor="let page of pages"
-        [class.active]="page === currentPage">
+    <!-- Pages -->
+    <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
       <button class="page-link fw-bold" (click)="changePage(page)">
         {{ page }}
       </button>
     </li>
 
+    <!-- Next -->
     <li class="page-item" [class.disabled]="currentPage === totalPages">
       <button class="page-link text-dark" (click)="changePage(currentPage + 1)">
         Next <i class="bi bi-chevron-right"></i>
@@ -137,5 +82,3 @@
     </li>
   </ul>
 </nav>
-
-</section>
